@@ -8,21 +8,21 @@
 
 import UIKit
 
-class TweetCell: UITableViewCell {
-
-    @IBOutlet weak var profilePic: UIImageView!
-    @IBOutlet weak var displayName: UILabel!
-    @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var time: UILabel!
-    @IBOutlet weak var retweetIcon: UIImageView!
-    @IBOutlet weak var retweetCount: UILabel!
-    @IBOutlet weak var likeIcon: UIImageView!
-    @IBOutlet weak var likeCount: UILabel!
+class UserTweetTweetCell: UITableViewCell {
     
-    @IBOutlet weak var tweetText: UILabel!
+    
+    @IBOutlet weak var profilePic: UIImageView!
     let likeTap = UITapGestureRecognizer()
     let retweetTap = UITapGestureRecognizer()
     
+    @IBOutlet weak var displayName: UILabel!
+    @IBOutlet weak var name: UILabel!
+    @IBOutlet weak var time: UILabel!
+    @IBOutlet weak var tweetText: UILabel!
+    @IBOutlet weak var retweetIcon: UIImageView!
+    @IBOutlet weak var likeIcon: UIImageView!
+    @IBOutlet weak var retweetCount: UILabel!
+    @IBOutlet weak var likeCount: UILabel!
     var tweet: Tweet? {
         didSet {
             profilePic.setImageWithURL(tweet!.user!.profileURL!)
@@ -64,25 +64,24 @@ class TweetCell: UITableViewCell {
             
             likeIcon.userInteractionEnabled = true
             retweetIcon.userInteractionEnabled = true
-            
             likeIcon.addGestureRecognizer(likeTap)
             retweetIcon.addGestureRecognizer(retweetTap)
+            
         }
     }
-
     
     func likeTweet() {
-//        tweet!.favorited = !tweet!.favorited
-//        
-//        
-//        if(tweet!.favorited) {
-//            tweet?.likeCount = tweet!.likeCount + 1
-//            likeIcon.image = UIImage(named: "like_on")
-//        } else {
-//            likeIcon.image = UIImage(named: "like")
-//            tweet?.likeCount = tweet!.likeCount - 1
-//        }
-//        likeCount.text = String(tweet!.likeCount)
+        //        tweet!.favorited = !tweet!.favorited
+        //
+        //
+        //        if(tweet!.favorited) {
+        //            tweet?.likeCount = tweet!.likeCount + 1
+        //            likeIcon.image = UIImage(named: "like_on")
+        //        } else {
+        //            likeIcon.image = UIImage(named: "like")
+        //            tweet?.likeCount = tweet!.likeCount - 1
+        //        }
+        //        likeCount.text = String(tweet!.likeCount)
         if(tweet!.favorited == true) {
             TwitterClient.sharedInstance.unlike(tweet!.id!, success: { () -> () in
                 self.tweet!.favorited = !self.tweet!.favorited
@@ -91,13 +90,13 @@ class TweetCell: UITableViewCell {
                 self.likeCount.text = String(self.tweet!.likeCount)
             })
         } else {
-            TwitterClient.sharedInstance.like(tweet!.id!, success: { () -> () in                
+            TwitterClient.sharedInstance.like(tweet!.id!, success: { () -> () in
                 self.tweet!.favorited = !self.tweet!.favorited
                 self.tweet?.likeCount = self.tweet!.likeCount + 1
                 self.likeIcon.image = UIImage(named: "like_on")
                 self.likeCount.text = String(self.tweet!.likeCount)
             })
-
+            
         }
     }
     
@@ -114,18 +113,18 @@ class TweetCell: UITableViewCell {
                 self.tweet?.retweetCount = self.tweet!.retweetCount + 1
             }
             self.retweetCount.text = String(self.tweet!.retweetCount)
-
+            
         })
     }
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
-
+    
 }

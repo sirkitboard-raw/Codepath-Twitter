@@ -21,7 +21,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.tweets = tweets
             self.tableView.reloadData()
             }) { (error:NSError) -> () in
-                print("error")
+                print("error \(error.localizedDescription)")
         }
         // Do any additional setup after loading the view.
     }
@@ -36,6 +36,9 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         TwitterClient.sharedInstance.logout()
     }
     
+    @IBAction func onCompose(sender: AnyObject) {
+        
+    }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("TweetCell", forIndexPath: indexPath) as! TweetCell
         
@@ -49,6 +52,39 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             return tweets!.count
         }
         return 0
+    }
+    
+//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+//        let vc = segue.destinationViewController as! UserViewController
+//        let indexPath = tableView.indexPathForCell(sender as! UITableViewCell)
+//        let user = tweets?[indexPath!.row].user
+//        vc.user = user
+//    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if(segue.identifier == "compose") {
+            let vc = segue.destinationViewController as! ComposeViewController
+//            let indexPath = tableView.indexPathForCell(sender as! UITableViewCell)
+//            let tweet = tweets?[indexPath!.row]
+            vc.user = User.currentUser
+        }
+        else {
+            let vc = segue.destinationViewController as! TweetViewController
+            let indexPath = tableView.indexPathForCell(sender as! UITableViewCell)
+            let tweet = tweets?[indexPath!.row]
+            vc.tweet = tweet
+        }
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        TwitterClient.sharedInstance.homeTimeline({ (tweets: [Tweet]) -> () in
+            self.tweets = tweets
+            self.tableView.reloadData()
+            }) { (error:NSError) -> () in
+                print("error \(error.localizedDescription)")
+        }
+
     }
     /*
     // MARK: - Navigation
